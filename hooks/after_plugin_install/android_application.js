@@ -10,7 +10,13 @@ module.exports = function(context) {
 
   var manifestFile = path.join(platformRoot, 'AndroidManifest.xml');
 
+
+
+   console.log(manifestFile);
   if (fs.existsSync(manifestFile)) {
+
+	   console.log("进入manifestFile了");
+
 
     fs.readFile(manifestFile, 'utf8', function (err,data) {
       if (err) {
