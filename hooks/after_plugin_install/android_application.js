@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 
-module.exports = function(context) {
 
   var fs = context.requireCordovaModule('fs'),
     path = context.requireCordovaModule('path');
 
   var platformRoot = path.join(context.opts.projectRoot, 'platforms/android');
-
-
   var manifestFile = path.join(platformRoot, 'AndroidManifest.xml');
+  console.log("afterPluginInstallHook Called");
 
 
 
@@ -35,6 +33,3 @@ module.exports = function(context) {
       }
     });
   }
-
-
-};
