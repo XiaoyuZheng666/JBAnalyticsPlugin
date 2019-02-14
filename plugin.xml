@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jb-analytics" version="1.0.5" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-jb-analytics" version="1.0.6" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JBAnalyticsPlugin</name>
     <js-module name="JBAnalyticsPlugin" src="www/JBAnalyticsPlugin.js">
         <clobbers target="cordova.plugins.JBAnalyticsPlugin" />
     </js-module>
+
+
+        <hook type="after_plugin_install" src="hooks/after_plugin_install/android_application.js" />
 
      <platform name="android">    
         <config-file target="res/xml/config.xml" parent="/*">    
@@ -20,7 +23,6 @@
         <source-file src="src/android/JBUserDefaults.java" target-dir="src/com/zhaoyin/analytics"/>  
         <lib-file src="src/android/libs/gson-2.8.0.jar" />
   
-        <hook type="after_plugin_install" src="hooks/after_plugin_install/android_application.js" />
     </platform>
 
     <platform name="ios">
