@@ -6,12 +6,20 @@
     </js-module>
 
      <platform name="android">    
-        <source-file src="src/android/JBAnalyticsPlugin.java" target-dir="src/com/zhaoyin/analytics"/>    
         <config-file target="res/xml/config.xml" parent="/*">    
             <feature name="JBAnalyticsPlugin">    
                 <param name="android-package" value="com.zhaoyin.analytics.JBAnalyticsPlugin"/>    
             </feature>    
-        </config-file>    
+        </config-file>
+        <source-file src="src/android/JBAnalyticsPlugin.java" target-dir="src/com/zhaoyin/analytics"/>    
+        <source-file src="src/android/AppDataModel.java" target-dir="src/com/zhaoyin/analytics"/>
+        <source-file src="src/android/EventModel.java" target-dir="src/com/zhaoyin/analytics"/>
+        <source-file src="src/android/JBAnalytics.java" target-dir="src/com/zhaoyin/analytics"/>
+        <source-file src="src/android/JBApplication.java" target-dir="src/com/zhaoyin/analytics"/>
+        <source-file src="src/android/JBHttpUtil.java" target-dir="src/com/zhaoyin/analytics"/>
+        <source-file src="src/android/JBUserDefaults.java" target-dir="src/com/zhaoyin/analytics"/>  
+        <lib-file src="src/android/libs/gson-2.8.0.jar" />
+  
     </platform>
 
     <platform name="ios">
@@ -22,5 +30,49 @@
         </config-file>
         <header-file src="src/ios/JBAnalyticsPlugin.h" />
         <source-file src="src/ios/JBAnalyticsPlugin.m" />
+
+        <header-file src="src/ios/JBUserDefaults.h" />
+        <source-file src="src/ios/JBUserDefaults.m" />
+
+        <header-file src="src/ios/XYNetworking.h" />
+        <source-file src="src/ios/XYNetworking.m" />
+
+        <header-file src="src/ios/SBJson/NSObject+SBJson.h" />
+        <source-file src="src/ios/SBJson/NSObject+SBJson.m" />
+
+        <header-file src="src/ios/SBJson/SBJson.h" />
+        <header-file src="src/ios/SBJson/SBJsonParser.h" />
+        <source-file src="src/ios/SBJson/SBJsonParser.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamParser.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamParser.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamParserAccumulator.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamParserAccumulator.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamParserAdapter.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamParserAdapter.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamParserState.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamParserState.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamWriter.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamWriter.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamWriterAccumulator.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamWriterAccumulator.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonStreamWriterState.h" />
+        <source-file src="src/ios/SBJson/SBJsonStreamWriterState.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonTokeniser.h" />
+        <source-file src="src/ios/SBJson/SBJsonTokeniser.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonUTF8Stream.h" />
+        <source-file src="src/ios/SBJson/SBJsonUTF8Stream.m" />
+
+        <header-file src="src/ios/SBJson/SBJsonWriter.h" />
+        <source-file src="src/ios/SBJson/SBJsonWriter.m" />
+
     </platform>    
 </plugin>
