@@ -1,4 +1,4 @@
-# cordova-plugin-xychannel- A Plugin for Cordova that can get channelid
+# cordova-plugin-jb-analytics- A Plugin for Cordova that can get analytics info
 
 ##Requirements
 
