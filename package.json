@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-jb-analytics",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "an analytics plugin",
   "cordova": {
     "id": "cordova-plugin-jb-analytics",
