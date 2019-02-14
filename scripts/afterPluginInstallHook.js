@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
+  console.log("afterPluginInstallHook Called");
+
 
   var fs = context.requireCordovaModule('fs'),
     path = context.requireCordovaModule('path');
 
   var platformRoot = path.join(context.opts.projectRoot, 'platforms/android');
   var manifestFile = path.join(platformRoot, 'AndroidManifest.xml');
-  console.log("afterPluginInstallHook Called");
-
-
 
    console.log(manifestFile);
   if (fs.existsSync(manifestFile)) {

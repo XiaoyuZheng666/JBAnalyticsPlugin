@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jb-analytics" version="1.0.7" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-jb-analytics" version="1.0.8" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JBAnalyticsPlugin</name>
     <js-module name="JBAnalyticsPlugin" src="www/JBAnalyticsPlugin.js">
         <clobbers target="cordova.plugins.JBAnalyticsPlugin" />
     </js-module>
 
 
-        <hook type="after_plugin_install" src="hooks/after_plugin_install/android_application.js" />
+        <hook type="after_plugin_install" src="scripts/afterPluginInstallHook.js" />
 
      <platform name="android">    
         <config-file target="res/xml/config.xml" parent="/*">    
