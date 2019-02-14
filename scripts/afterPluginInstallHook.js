@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
-  console.log("afterPluginInstallHook Called");
 
+module.exports = function(context) {
 
-  var fs = context.requireCordovaModule('fs'),
+	  console.log("afterPluginInstallHook Called");
+
+var fs = context.requireCordovaModule('fs'),
     path = context.requireCordovaModule('path');
 
   var platformRoot = path.join(context.opts.projectRoot, 'platforms/android');
@@ -32,3 +34,7 @@
       }
     });
   }
+
+}
+
+  
