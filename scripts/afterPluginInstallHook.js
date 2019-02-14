@@ -3,20 +3,16 @@
 
 module.exports = function(context) {
 
-	  console.log("afterPluginInstallHook Called");
-
 var fs = context.requireCordovaModule('fs'),
     path = context.requireCordovaModule('path');
 
   var platformRoot = path.join(context.opts.projectRoot, 'platforms/android');
-  var manifestFile = path.join(platformRoot, 'AndroidManifest.xml');
+  var manifestFile = path.join(platformRoot, 'app/src/main/AndroidManifest.xml');
 
    console.log(manifestFile);
   if (fs.existsSync(manifestFile)) {
 
 	   console.log("进入manifestFile了");
-
-
     fs.readFile(manifestFile, 'utf8', function (err,data) {
       if (err) {
         throw new Error('Unable to find AndroidManifest.xml: ' + err);
