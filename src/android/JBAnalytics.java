@@ -1,10 +1,12 @@
 package com.zhaoyin.analytics;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -18,6 +20,8 @@ import java.util.Date;
 public class JBAnalytics {
 
     private static String currentDateStr;
+    public static final String JBLaunchSuccessNotify="android.intent.action.launchsuccess";//启动成功通知
+
 
     private static String eventUrl="https://app.goldrock.cn/metis/put/event";
 
@@ -69,6 +73,8 @@ public class JBAnalytics {
         if ((list != null)&&(list.size()>0)) {
             EventModel eventModel= (EventModel) list.get(list.size()-1);
             AppDataModel dataModel=eventModel.getAppData();
+
+            //如果不是这次触发的，那都是之前启动失败的
             if (getCurrentDateStr().equals(dataModel.getTriggerTime())){
                 return;
             }
@@ -84,6 +90,9 @@ public class JBAnalytics {
                         if (result!=null){
                                 list.remove(eventModel);
                                 JBUserDefaults.getInstance(context).setFailedLaunchs(list);
+                                if (list.size()>0){
+                                    reportErrorLaunches(context);
+                                }
                         }
 
                     }
@@ -110,6 +119,12 @@ public class JBAnalytics {
 
             EventModel eventModel= (EventModel) list.get(list.size()-1);
             AppDataModel dataModel=eventModel.getAppData();
+
+            //是这次触发的才算成功启动
+            if (!getCurrentDateStr().equals(dataModel.getTriggerTime())){
+                return;
+            }
+
             dataModel.setStatus(true);
 
             Gson gson = new Gson();
@@ -125,6 +140,9 @@ public class JBAnalytics {
                             if (getCurrentDateStr().equals(dataModel.getTriggerTime())){
                                 list.remove(eventModel);
                                 JBUserDefaults.getInstance(context).setFailedLaunchs(list);
+
+                                Intent contractlistIntent = new Intent(JBLaunchSuccessNotify);
+                                LocalBroadcastManager.getInstance(context).sendBroadcast(contractlistIntent);
                             }
                         }
 

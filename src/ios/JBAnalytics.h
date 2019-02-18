@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#define kJBLaunchSuccessNotification @"JBLaunchSuccessNotification"
 
 @interface JBAnalytics : NSObject
 

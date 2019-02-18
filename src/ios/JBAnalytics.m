@@ -55,12 +55,17 @@ static NSString*_currentDateStr=nil;
 +(void)reportErrorLaunches{
     NSMutableArray*array =[JBUserDefaults getFailedLaunchs];
  
+    if (array==nil||array.count==0) {
+        return;
+    }
+    
     NSDictionary*dic =array.lastObject;
     
     if (!dic) {
         return;
     }
     
+    //如果不是这次触发的，那都是之前启动失败的
     if ([dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
         return;
     }
@@ -70,6 +75,12 @@ static NSString*_currentDateStr=nil;
         if ([obj statusCode]==200) {
                 [array removeObject:dic];
                 [JBUserDefaults setFailedLaunchs:array];
+            
+            if (array.count>0) {
+                [self reportErrorLaunches];
+            }
+            
+            
         }
     } andCallBackBody:nil];
 }
@@ -79,12 +90,20 @@ static NSString*_currentDateStr=nil;
     NSMutableDictionary*dic =array.lastObject;
     
     if (dic) {
+        
+        //是这次触发的才算成功启动
+        if (![dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
+            return;
+        }
+
         dic[@"appData"][@"status"]=[NSNumber numberWithBool:YES];
         
         [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:dic andResponseHeader:^(id obj) {
             
             if ([obj statusCode]==200) {
                 if ([dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kJBLaunchSuccessNotification object:NULL];
                     [array removeObject:dic];
                     [JBUserDefaults setFailedLaunchs:array];
                 }
