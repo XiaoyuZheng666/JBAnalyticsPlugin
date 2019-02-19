@@ -87,6 +87,11 @@ static NSString*_currentDateStr=nil;
 
 +(void)reportSuccessLaunches{
     NSMutableArray*array =[JBUserDefaults getFailedLaunchs];
+
+        if (array==nil||array.count==0) {
+        return;
+    }
+    
     NSMutableDictionary*dic =array.lastObject;
     
     if (dic) {
