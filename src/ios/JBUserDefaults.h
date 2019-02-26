@@ -9,9 +9,14 @@
 
 @interface JBUserDefaults : NSObject
 
+//用来保存记录的eventid
++(NSMutableArray *)getEventIds;
++(void)setEventIds:(NSMutableArray *)datas;
 
++(NSMutableArray*)getRecordsWithKey:(NSString*)key;
++(void)setRecords:(NSMutableArray*)datas withKey:(NSString*)key;
 
-+(NSMutableArray*)getFailedLaunchs;
-+(void)setFailedLaunchs:(NSMutableArray*)datas;
++(NSMutableArray*)getLaunchs;
++(void)setLaunchs:(NSMutableArray*)datas;
 
 @end

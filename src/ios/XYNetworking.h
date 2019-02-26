@@ -23,7 +23,7 @@
 
 + (void)postRequestByServiceUrl:(NSString *)service
                          andApi:(NSString *)api
-                      andParams:(NSDictionary *)params andResponseHeader:(void (^)(id obj))responseHeader
+                      andParams:(id)params andResponseHeader:(void (^)(id obj))responseHeader
                     andCallBackBody:(void (^)(id obj))callbackBody;
 
 /**

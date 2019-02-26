@@ -8,5 +8,6 @@
 #import <Cordova/CDV.h>
 
 @interface JBAnalyticsPlugin : CDVPlugin
+- (void)onEventWithData:(CDVInvokedUrlCommand*)command;
 
 @end

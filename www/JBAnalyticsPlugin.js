@@ -1,7 +1,12 @@
 var exec = require('cordova/exec');
 
-function  JBAnalyticsPlugin() {};
+function  JBAnalyticsPlugin() {
+};
 
-//new一个JBAnalyticsPlugin的类对象，并赋值给module.exports
+
+JBAnalyticsPlugin.prototype.onEventWithData = function (eventId,eventData) {
+    exec(null, null, 'JBAnalyticsPlugin', 'onEventWithData',[eventId, eventData]);
+};
+
 var analyticsModel = new JBAnalyticsPlugin();
 module.exports = analyticsModel;

@@ -55,19 +55,20 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-            if (dic) {
-                callback(dic);
-            }else
-            {
-                
-                callback(error.description);
+            if (data) {
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                if (dic) {
+                    if (callback) {
+                        callback(dic);
+                    }
+                }else
+                {
+                    if (callback) {
+                        callback(error.description);
+                    }
+                }
             }
-            
-            
         });
-        
-        
     }];
     
     
@@ -79,7 +80,7 @@
 // 自带原生post请求
 + (void)postRequestByServiceUrl:(NSString *)service
                          andApi:(NSString *)api
-                      andParams:(NSDictionary *)params andResponseHeader:(void (^)(id obj))responseHeader
+                      andParams:(id)params andResponseHeader:(void (^)(id obj))responseHeader
                 andCallBackBody:(void (^)(id obj))callbackBody
 
 {
@@ -115,30 +116,32 @@
     
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        
-        if (response) {
-            responseHeader(response);
-        }
-        
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        
-        if (dic) {
-            callbackBody(dic);
-        }else
-        {
-            if (error) {
-                callbackBody(error.description);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (response) {
+                responseHeader(response);
             }
-        }
-        
-        
+            
+            if (data) {
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                
+                if (dic) {
+                    if (callbackBody) {
+                        callbackBody(dic);
+                    }
+                }else
+                {
+                    if (error) {
+                        if (callbackBody) {
+                            callbackBody(error.description);
+                        }
+                    }
+                }
+            }
+        });
     }];
     
     
     [task resume];
-    
-    
-    
 }
 
 // 原生上传图片

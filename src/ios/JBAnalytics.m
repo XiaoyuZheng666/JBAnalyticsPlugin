@@ -12,9 +12,12 @@
 #import "XYNetworking.h"
 
 #define baseApiUrl @"https://app.goldrock.cn"
+// #define baseApiUrl @"http://testmetis.goldrock.cn:2752"
+#define maxReportNum 90//同一个事件最多纪录90条
 @implementation JBAnalytics
 
 static NSString*_currentDateStr=nil;
+static NSDictionary*_currentAppdata=nil;
 +(NSString*)currentDateStr{
     if (_currentDateStr==nil) {
         _currentDateStr=@"";
@@ -30,11 +33,28 @@ static NSString*_currentDateStr=nil;
     }
 }
 
++(NSDictionary*)currentAppdata{
+    if (_currentAppdata==nil) {
+        _currentAppdata=[NSDictionary dictionary];
+    }
+    
+    return _currentAppdata;
+}
+
++(void)setCurrentAppData:(NSDictionary *)currentAppdata{
+    
+    if (_currentAppdata!=currentAppdata) {
+        _currentAppdata=currentAppdata;
+    }
+}
+
 + (void)initAnalytics
 {
     JBDevice*device=[[JBDevice alloc]init];
     NSMutableDictionary*dic=[NSMutableDictionary dictionary];
-    NSMutableDictionary*appdataValue=[NSMutableDictionary dictionaryWithDictionary:[device deviceProperties]];
+    
+    [self setCurrentAppData:[device deviceProperties]];
+    NSMutableDictionary*appdataValue=[NSMutableDictionary dictionaryWithDictionary:[self currentAppdata]];
     
     appdataValue[@"triggerTime"]=[self getDateStrFromDate:[NSDate date]];
     
@@ -47,46 +67,86 @@ static NSString*_currentDateStr=nil;
     dic[@"projectId"]=@"02";
     dic[@"source"]=@"APP";
     
-    NSMutableArray*launchArray =[JBUserDefaults getFailedLaunchs];
+    NSMutableArray*launchArray =[JBUserDefaults getLaunchs];
     [launchArray addObject:dic];
-    [JBUserDefaults setFailedLaunchs:launchArray];
+    [JBUserDefaults setLaunchs:launchArray];
 }
 
-+(void)reportErrorLaunches{
-    NSMutableArray*array =[JBUserDefaults getFailedLaunchs];
- 
++(void)reportSavedEvents{
+    
+    [self reportSavedLaunchEvents];
+    [self reportSavedOtherEvents];
+}
+
++(void)reportSavedLaunchEvents{
+    //处理启动事件
+    NSMutableArray*reportArray=[NSMutableArray array];
+    
+    NSMutableArray*array =[JBUserDefaults getLaunchs];
+    
     if (array==nil||array.count==0) {
         return;
     }
     
-    NSDictionary*dic =array.lastObject;
-    
-    if (!dic) {
-        return;
+    for (NSDictionary*dic in array) {
+        
+        if ([dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
+            continue;
+        }else{
+            [reportArray addObject:dic];
+        }
     }
     
-    //如果不是这次触发的，那都是之前启动失败的
-    if ([dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
+    if (reportArray.count==0) {
         return;
     }
-
-    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:dic andResponseHeader:^(id obj) {
+    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:reportArray andResponseHeader:^(id obj) {
         
         if ([obj statusCode]==200) {
-                [array removeObject:dic];
-                [JBUserDefaults setFailedLaunchs:array];
-            
-            if (array.count>0) {
-                [self reportErrorLaunches];
-            }
-            
-            
+            [array removeObjectsInArray:reportArray];
+            [JBUserDefaults setLaunchs:array];
         }
     } andCallBackBody:nil];
 }
 
-+(void)reportSuccessLaunches{
-    NSMutableArray*array =[JBUserDefaults getFailedLaunchs];
++(void)reportSavedOtherEvents{
+    //处理前端过来的保存的发送失败的事件
+    NSMutableArray*reportTempArray=[NSMutableArray array];
+    NSMutableArray*eventidsTempArray=[NSMutableArray array];
+
+    NSMutableArray*array =[JBUserDefaults getEventIds];
+    
+    for (NSString*eventid in array) {
+        NSMutableArray*records =[JBUserDefaults getRecordsWithKey:eventid];
+        [reportTempArray addObjectsFromArray:records];
+        [eventidsTempArray addObject:eventid];
+        
+        if (reportTempArray.count>99) {
+            [reportTempArray removeObjectsInArray:records];
+            [eventidsTempArray removeObject:eventid];
+            break;
+        }
+    }
+    
+    if (reportTempArray.count==0) {
+        return;
+    }
+    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:reportTempArray andResponseHeader:^(id obj) {
+        
+        if ([obj statusCode]==200) {
+            for (NSString*eventid in eventidsTempArray) {
+                NSMutableArray*records =[JBUserDefaults getRecordsWithKey:eventid];
+                [records removeAllObjects];
+                [JBUserDefaults setRecords:records withKey:eventid];
+            }
+            [array removeObjectsInArray:eventidsTempArray];
+            [JBUserDefaults setEventIds:array];
+        }
+    } andCallBackBody:nil];
+}
+
++(void)reportSucceededLaunch{
+    NSMutableArray*array =[JBUserDefaults getLaunchs];
 
         if (array==nil||array.count==0) {
         return;
@@ -102,20 +162,61 @@ static NSString*_currentDateStr=nil;
         }
 
         dic[@"appData"][@"status"]=[NSNumber numberWithBool:YES];
+        dic[@"appData"][@"triggerTime"]=[self getDateStrFromDate:[NSDate date]];
+
         
         [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:dic andResponseHeader:^(id obj) {
             
             if ([obj statusCode]==200) {
-                if ([dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
-                    
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kJBLaunchSuccessNotification object:NULL];
+                
                     [array removeObject:dic];
-                    [JBUserDefaults setFailedLaunchs:array];
-                }
             }
+            [JBUserDefaults setLaunchs:array];
+
+
         } andCallBackBody:nil];
     }
 }
+
++(void)reportSucceededEventwithId:(NSString*)eventId andDataDic:(NSDictionary*)dataDic{
+    
+    if (dataDic==nil) {
+        return;
+    }
+    
+    NSMutableDictionary*totalDic=[NSMutableDictionary dictionaryWithDictionary:dataDic];
+    totalDic[@"appData"]=[self currentAppdata];
+    
+    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:totalDic andResponseHeader:^(id obj) {
+        
+        if ([obj statusCode]!=200) {
+        
+            NSMutableArray*eventids =[JBUserDefaults getEventIds];
+            
+            if (![self containsStr:eventId inArray:eventids]) {
+                [eventids addObject:eventId];
+            }
+            
+            [JBUserDefaults setEventIds:eventids];
+            
+            NSMutableArray*records=[JBUserDefaults getRecordsWithKey:eventId];
+            [records addObject:totalDic];
+            [JBUserDefaults setRecords:records withKey:eventId];
+        }
+    } andCallBackBody:nil];
+}
+
+//判断某个字符串是否在数组内部
++(BOOL)containsStr:(NSString*)str inArray:(NSArray*)array{
+    
+    for (NSString*string in array) {
+        if ([string isEqualToString:str]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 
 +(NSString *)getDateStrFromDate:(NSDate *)date
 {

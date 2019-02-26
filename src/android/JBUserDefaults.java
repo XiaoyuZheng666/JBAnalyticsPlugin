@@ -18,6 +18,7 @@ public class JBUserDefaults {
     private static String name = "JBUserDefaults";
 
     private static String launchesKey = "launchesKey";
+    private static String eventKey = "eventKey";
 
     private JBUserDefaults() {
     }
@@ -31,7 +32,7 @@ public class JBUserDefaults {
         return userDefaults;
     }
 
-    public  ArrayList getFailedLaunchs(){
+    public  ArrayList getLaunchs(){
         String json = sp.getString(launchesKey, null);
         if (json != null)
         {
@@ -48,11 +49,59 @@ public class JBUserDefaults {
     }
 
 
-    public  void setFailedLaunchs(ArrayList<EventModel> list){
+    public  void setLaunchs(ArrayList<EventModel> list){
         SharedPreferences.Editor editor = sp.edit();
         Gson gson = new Gson();
         String json = gson.toJson(list);
         editor.putString(launchesKey, json);
+        editor.commit();
+    }
+
+    public  ArrayList getEventIds(){
+        String json = sp.getString(eventKey, null);
+        if (json != null)
+        {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<String>>(){}.getType();
+
+            List<String> alterSamples = new ArrayList<String>();
+            alterSamples = gson.fromJson(json, type);
+
+            return (ArrayList) alterSamples;
+        }
+
+        return null;
+    }
+
+    public  void setEventIds(ArrayList<String> list){
+        SharedPreferences.Editor editor = sp.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(eventKey, json);
+        editor.commit();
+    }
+
+    public  ArrayList getRecordsWithKey(String key){
+        String json = sp.getString(key, null);
+        if (json != null)
+        {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<EventModel>>(){}.getType();
+
+            List<EventModel> models = new ArrayList<EventModel>();
+            models = gson.fromJson(json, type);
+
+            return (ArrayList) models;
+        }
+
+        return null;
+    }
+
+    public  void setRecordsWithKey(ArrayList<EventModel> list,String key){
+        SharedPreferences.Editor editor = sp.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
         editor.commit();
     }
 }

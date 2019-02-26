@@ -14,9 +14,13 @@
 
 + (void)initAnalytics;
 
-+(void)reportErrorLaunches;
++(void)reportSavedEvents;
 
-+(void)reportSuccessLaunches;
+//发送这次成功的启动
++(void)reportSucceededLaunch;
+
++(void)reportSucceededEventwithId:(NSString*)eventId andDataDic:(NSDictionary*)dataDic;
+
 
 @end
 
