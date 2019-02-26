@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-jb-analytics" version="1.3.2" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-jb-analytics" version="1.3.3" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>JBAnalyticsPlugin</name>
     <js-module name="JBAnalyticsPlugin" src="www/JBAnalyticsPlugin.js">
         <clobbers target="cordova.plugins.JBAnalyticsPlugin" />
@@ -34,6 +34,9 @@
 
         <header-file src="src/ios/JBAnalytics.h" />
         <source-file src="src/ios/JBAnalytics.m" />
+
+        <header-file src="src/ios/XYURLResponse.h" />
+        <source-file src="src/ios/XYURLResponse.m" />
 
         <header-file src="src/ios/JBUserDefaults.h" />
         <source-file src="src/ios/JBUserDefaults.m" />
