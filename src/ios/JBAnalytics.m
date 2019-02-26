@@ -53,12 +53,13 @@ static NSDictionary*_currentAppdata=nil;
     JBDevice*device=[[JBDevice alloc]init];
     NSMutableDictionary*dic=[NSMutableDictionary dictionary];
     
-    [self setCurrentAppData:[device deviceProperties]];
-    NSMutableDictionary*appdataValue=[NSMutableDictionary dictionaryWithDictionary:[self currentAppdata]];
-    
+    NSMutableDictionary*appdataValue=[NSMutableDictionary dictionaryWithDictionary:[device deviceProperties]];
     appdataValue[@"triggerTime"]=[self getDateStrFromDate:[NSDate date]];
-    
     [self setCurrentDateStr:appdataValue[@"triggerTime"]];
+    appdataValue[@"status"]=[NSNumber numberWithBool:YES];
+    
+    [self setCurrentAppData:[appdataValue copy]];
+    
     appdataValue[@"status"]=[NSNumber numberWithBool:NO];
     dic[@"appData"]=appdataValue;
     dic[@"appChannel"]=[self getChannelStr];

@@ -49,23 +49,22 @@ public class JBAnalytics {
 
         String cordovaStr ="7.1.4";
         JBDevice device= new JBDevice();
+
         AppDataModel appDataModel=new AppDataModel();
-
         appDataModel.setUniqueid(getUuid(context));
-
         setCurrentDateStr(getDateStrFromDate(new Date()));
         appDataModel.setTriggerTime(getCurrentDateStr());
-
         appDataModel.setVersion(device.getOSVersion());
         appDataModel.setPlatform(device.getPlatform());
         appDataModel.setModel(device.getModel());
         appDataModel.setManufacturer(device.getManufacturer());
         appDataModel.setCordovaVersion(cordovaStr);
-        appDataModel.setStatus(false);
+        appDataModel.setStatus(true);
 
         JBAnalytics.setAppData(appDataModel);
+
         EventModel eventModel=new EventModel();
-        eventModel.setAppData(JBAnalytics.getAppData());
+        eventModel.setAppData(getLaunchAppDataModel(context,device,cordovaStr));
         String channelNumber = getAppMetaData(context, "ZHIKU_CHANNEL");//获取app当前的渠道号
         eventModel.setAppChannel(channelNumber);
         eventModel.setAppVersion(getVersionName(context));
@@ -79,6 +78,21 @@ public class JBAnalytics {
         }
         list.add(eventModel);
         JBUserDefaults.getInstance(context).setLaunchs(list);
+    }
+
+    public static AppDataModel getLaunchAppDataModel(Context context,JBDevice device,String cordovaStr){
+        AppDataModel appDataModel=new AppDataModel();
+        appDataModel.setUniqueid(getUuid(context));
+        appDataModel.setTriggerTime(getCurrentDateStr());
+        appDataModel.setVersion(device.getOSVersion());
+        appDataModel.setPlatform(device.getPlatform());
+        appDataModel.setModel(device.getModel());
+        appDataModel.setManufacturer(device.getManufacturer());
+        appDataModel.setCordovaVersion(cordovaStr);
+        appDataModel.setStatus(false);
+
+        return appDataModel;
+
     }
 
     public static void reportSavedEvents(Context context){
