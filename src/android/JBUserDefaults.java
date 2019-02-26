@@ -45,7 +45,7 @@ public class JBUserDefaults {
             return (ArrayList) alterSamples;
         }
 
-        return null;
+        return (new ArrayList<EventModel>());
     }
 
 
@@ -70,7 +70,7 @@ public class JBUserDefaults {
             return (ArrayList) alterSamples;
         }
 
-        return null;
+        return new ArrayList<String>();
     }
 
     public  void setEventIds(ArrayList<String> list){
@@ -94,7 +94,7 @@ public class JBUserDefaults {
             return (ArrayList) models;
         }
 
-        return null;
+        return new ArrayList<EventModel>();
     }
 
     public  void setRecordsWithKey(ArrayList<EventModel> list,String key){

@@ -269,7 +269,8 @@ public class JBAnalytics {
                 @Override
                 public void onRequestComplete(String result) {
 
-                    if (result!=null){
+                    //为null就是失败的请求失败的情况
+                    if (result==null){
 
                         ArrayList <String>eventids =JBUserDefaults.getInstance(context).getEventIds();
 
