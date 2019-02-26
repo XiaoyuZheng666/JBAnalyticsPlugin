@@ -11,7 +11,8 @@
 ##Simple Usage
 
 
-  
+        cordova.plugins.JBAnalyticsPlugin.onEventWithData(eventId,data);
+
 ##LICENSE
 
 The MIT License (MIT)
