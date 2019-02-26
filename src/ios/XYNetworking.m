@@ -7,6 +7,7 @@
 
 #import "XYNetworking.h"
 #import "SBJson.h"
+#import "XYURLResponse.h"
 @implementation XYNetworking
 
 // 处理字典参数
@@ -119,6 +120,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (response) {
                 responseHeader(response);
+            }else{
+                XYURLResponse*xyResponse=[[XYURLResponse alloc]init];
+                xyResponse.statusCode=400;
+                responseHeader(xyResponse);
             }
             
             if (data) {
