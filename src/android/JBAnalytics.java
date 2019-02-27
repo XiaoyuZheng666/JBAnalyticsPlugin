@@ -27,8 +27,8 @@ public class JBAnalytics {
 
     private static AppDataModel appData;
 
-   private static String eventUrl="https://app.goldrock.cn/metis/put/event";
-// private static String eventUrl="http://testmetis.goldrock.cn:2752/metis/put/event";
+// private static String eventHostUrl="http://testmetis.goldrock.cn:2752";
+private static String eventHostUrl="https://app.goldrock.cn";
 
 
     public static String getCurrentDateStr() {
@@ -127,7 +127,7 @@ public class JBAnalytics {
             String paramJson = gson.toJson(reportList);
 
             try {
-                JBHttpUtil.doPostAsyn(eventUrl, paramJson, new JBHttpUtil.CallBack() {
+                JBHttpUtil.doPostAsyn(eventHostUrl+"/metis/put/eventBatch", paramJson, new JBHttpUtil.CallBack() {
                     @Override
                     public void onRequestComplete(String result) {
 
@@ -173,7 +173,7 @@ public class JBAnalytics {
             String paramJson = gson.toJson(eventModel);
 
             try {
-                JBHttpUtil.doPostAsyn(eventUrl, paramJson, new JBHttpUtil.CallBack() {
+                JBHttpUtil.doPostAsyn(eventHostUrl+"/metis/put/event", paramJson, new JBHttpUtil.CallBack() {
                     @Override
                     public void onRequestComplete(String result) {
 
@@ -225,7 +225,7 @@ public class JBAnalytics {
             String paramJson = gson.toJson(reportTempList);
 
             try {
-                JBHttpUtil.doPostAsyn(eventUrl, paramJson, new JBHttpUtil.CallBack() {
+                JBHttpUtil.doPostAsyn(eventHostUrl+"/metis/put/eventBatch", paramJson, new JBHttpUtil.CallBack() {
                     @Override
                     public void onRequestComplete(String result) {
 
@@ -272,7 +272,7 @@ public class JBAnalytics {
         String paramJson = gson.toJson(eventModel);
 
         try {
-            JBHttpUtil.doPostAsyn(eventUrl, paramJson, new JBHttpUtil.CallBack() {
+            JBHttpUtil.doPostAsyn(eventHostUrl+"/metis/put/event", paramJson, new JBHttpUtil.CallBack() {
                 @Override
                 public void onRequestComplete(String result) {
 

@@ -103,7 +103,7 @@ static NSDictionary*_currentAppdata=nil;
     if (reportArray.count==0) {
         return;
     }
-    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:reportArray andResponseHeader:^(id obj) {
+    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/eventBatch" andParams:reportArray andResponseHeader:^(id obj) {
         
         if ([obj statusCode]==200) {
             [array removeObjectsInArray:reportArray];
