@@ -13,6 +13,8 @@
 
 #define baseApiUrl @"https://app.goldrock.cn"
 // #define baseApiUrl @"http://testmetis.goldrock.cn:2752"
+//#define baseApiUrl @"http://192.168.30.9:2752"
+
 #define maxReportNum 90//同一个事件最多纪录90条
 @implementation JBAnalytics
 
@@ -132,7 +134,7 @@ static NSDictionary*_currentAppdata=nil;
     if (reportTempArray.count==0) {
         return;
     }
-    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:reportTempArray andResponseHeader:^(id obj) {
+    [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/eventBatch" andParams:reportTempArray andResponseHeader:^(id obj) {
         
         if ([obj statusCode]==200) {
             for (NSString*eventid in eventidsTempArray) {
@@ -186,7 +188,10 @@ static NSDictionary*_currentAppdata=nil;
     }
     
     NSMutableDictionary*totalDic=[NSMutableDictionary dictionaryWithDictionary:dataDic];
-    totalDic[@"appData"]=[self currentAppdata];
+    
+    NSMutableDictionary*mutableAppdata=[NSMutableDictionary dictionaryWithDictionary:[self currentAppdata]];
+    mutableAppdata[@"triggerTime"]=[self getDateStrFromDate:[NSDate date]];
+    totalDic[@"appData"]=mutableAppdata;
     
     [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:totalDic andResponseHeader:^(id obj) {
         
@@ -201,6 +206,11 @@ static NSDictionary*_currentAppdata=nil;
             [JBUserDefaults setEventIds:eventids];
             
             NSMutableArray*records=[JBUserDefaults getRecordsWithKey:eventId];
+            
+            if(records.count>maxReportNum){
+                [records removeObject:records.firstObject];
+            }
+            
             [records addObject:totalDic];
             [JBUserDefaults setRecords:records withKey:eventId];
         }

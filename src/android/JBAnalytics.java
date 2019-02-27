@@ -22,6 +22,9 @@ public class JBAnalytics {
 
     private static String currentDateStr;
 
+    private static int maxReportNum=90;
+
+
     private static AppDataModel appData;
 
    private static String eventUrl="https://app.goldrock.cn/metis/put/event";
@@ -255,7 +258,11 @@ public class JBAnalytics {
             eventModel.setEventId(dataObj.getString("eventId"));
             eventModel.setProjectId(dataObj.getString("projectId"));
             eventModel.setSource(dataObj.getString("source"));
-            eventModel.setAppData(getAppData());
+
+            AppDataModel appData=getAppData();
+            appData.setTriggerTime(getDateStrFromDate(new Date()));
+
+            eventModel.setAppData(appData);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -280,6 +287,11 @@ public class JBAnalytics {
 
                         JBUserDefaults.getInstance(context).setEventIds(eventids);
                         ArrayList <EventModel>records=JBUserDefaults.getInstance(context).getRecordsWithKey(eventId);
+
+                        if (records.size()>maxReportNum){
+                            records.remove(records.get(0));
+                        }
+
                         records.add(eventModel);
                         JBUserDefaults.getInstance(context).setRecordsWithKey(records,eventId);
                     }
