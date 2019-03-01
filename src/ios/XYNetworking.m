@@ -97,8 +97,6 @@
     NSData *bodyData=[NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
 //    NSData *bodyData = [body dataUsingEncoding:NSUTF8StringEncoding];
     
-    
-    NSLog(@"输出Bdoy中的内容>>\n%@",[[NSString alloc]initWithData:bodyData encoding:NSUTF8StringEncoding]);
 
     
     // 设置请求体

@@ -8,7 +8,7 @@ public class JBApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        JBAnalytics.initAnalytics(this.getApplicationContext());
+        JBAnalytics.initAnalytics(this.getApplicationContext(),"https://app.goldrock.cn");
 
     }
 }

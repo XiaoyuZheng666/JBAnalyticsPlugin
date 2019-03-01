@@ -28,7 +28,7 @@ public class JBAnalytics {
     private static AppDataModel appData;
 
 // private static String eventHostUrl="http://testmetis.goldrock.cn:2752";
-private static String eventHostUrl="https://app.goldrock.cn";
+private static String eventHostUrl="";
 
 
     public static String getCurrentDateStr() {
@@ -48,7 +48,9 @@ private static String eventHostUrl="https://app.goldrock.cn";
     }
 
 
-    public static void initAnalytics(Context context){
+    public static void initAnalytics(Context context,String url){
+
+        eventHostUrl=url;
 
         String cordovaStr ="7.1.4";
         JBDevice device= new JBDevice();

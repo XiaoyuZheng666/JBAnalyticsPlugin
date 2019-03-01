@@ -11,7 +11,7 @@
 #import "ChannelPlugin.h"
 #import "XYNetworking.h"
 
-#define baseApiUrl @"https://app.goldrock.cn"
+//#define baseApiUrl @"https://app.goldrock.cn"
 // #define baseApiUrl @"http://testmetis.goldrock.cn:2752"
 //#define baseApiUrl @"http://192.168.30.9:2752"
 
@@ -20,6 +20,9 @@
 
 static NSString*_currentDateStr=nil;
 static NSDictionary*_currentAppdata=nil;
+
+static NSString*baseApiUrl=@"";
+
 +(NSString*)currentDateStr{
     if (_currentDateStr==nil) {
         _currentDateStr=@"";
@@ -50,8 +53,9 @@ static NSDictionary*_currentAppdata=nil;
     }
 }
 
-+ (void)initAnalytics
++ (void)initAnalyticsWithBaseApiUrl:(NSString*)url
 {
+    baseApiUrl=url;
     JBDevice*device=[[JBDevice alloc]init];
     NSMutableDictionary*dic=[NSMutableDictionary dictionary];
     
