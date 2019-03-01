@@ -12,7 +12,7 @@
 
 @property(class,nonatomic,copy) NSString*currentDateStr;
 
-+ (void)initAnalytics;
++ (void)initAnalyticsWithBaseApiUrl:(NSString*)url;
 
 +(void)reportSavedEvents;
 
