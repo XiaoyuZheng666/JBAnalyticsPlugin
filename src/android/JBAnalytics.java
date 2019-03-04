@@ -260,6 +260,7 @@ private static String eventHostUrl="";
             eventModel.setEventId(dataObj.getString("eventId"));
             eventModel.setProjectId(dataObj.getString("projectId"));
             eventModel.setSource(dataObj.getString("source"));
+            eventModel.setAdditional(dataObj.getString("additional"));
 
             AppDataModel appData=getAppData();
             appData.setTriggerTime(getDateStrFromDate(new Date()));

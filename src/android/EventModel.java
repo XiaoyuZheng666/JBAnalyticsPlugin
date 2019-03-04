@@ -9,6 +9,8 @@ public class EventModel implements Serializable {
     private String eventId;
     private String projectId;
     private String source;
+    private String additional;
+
 
     public AppDataModel getAppData() {
         return appData;
@@ -58,6 +60,13 @@ public class EventModel implements Serializable {
 
     public void setSource(String source) {
         this.source = source;
+    }
+    public String getAdditional() {
+        return additional;
+    }
+
+    public void setAdditional(String additional) {
+        this.additional = additional;
     }
 
 }
