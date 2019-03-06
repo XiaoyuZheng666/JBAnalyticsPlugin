@@ -53,7 +53,7 @@ static NSString*baseApiUrl=@"";
     }
 }
 
-+ (void)initAnalyticsWithBaseApiUrl:(NSString*)url
++ (void)initAnalyticsWithBaseApiUrl:(NSString*)url withProjectId:(NSString*)projectId
 {
     baseApiUrl=url;
     JBDevice*device=[[JBDevice alloc]init];
@@ -71,7 +71,7 @@ static NSString*baseApiUrl=@"";
     dic[@"appChannel"]=[self getChannelStr];
     dic[@"appVersion"]=[self getAppVersionStr];
     dic[@"eventId"]=@"launch_firstActivatedUser";
-    dic[@"projectId"]=@"02";
+    dic[@"projectId"]=projectId;
     dic[@"source"]=@"APP";
     
     NSMutableArray*launchArray =[JBUserDefaults getLaunchs];

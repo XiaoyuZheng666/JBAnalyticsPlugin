@@ -48,7 +48,7 @@ private static String eventHostUrl="";
     }
 
 
-    public static void initAnalytics(Context context,String url){
+    public static void initAnalytics(Context context,String url,String projectId){
 
         eventHostUrl=url;
 
@@ -74,7 +74,7 @@ private static String eventHostUrl="";
         eventModel.setAppChannel(channelNumber);
         eventModel.setAppVersion(getVersionName(context));
         eventModel.setEventId("launch_firstActivatedUser");
-        eventModel.setProjectId("02");
+        eventModel.setProjectId(projectId);
         eventModel.setSource("APP");
 
         ArrayList list=JBUserDefaults.getInstance(context).getLaunchs();
