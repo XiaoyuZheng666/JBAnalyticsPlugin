@@ -117,10 +117,17 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (response) {
-                responseHeader(response);
+                if (error) {
+                    XYURLResponse*xyResponse=[[XYURLResponse alloc]init];
+                    xyResponse.statusCode = error.code;
+                    responseHeader(xyResponse);
+                }else{
+                    responseHeader(response);
+                }
             }else{
+                //网络断开了
                 XYURLResponse*xyResponse=[[XYURLResponse alloc]init];
-                xyResponse.statusCode=400;
+                xyResponse.statusCode = -1009;
                 responseHeader(xyResponse);
             }
             

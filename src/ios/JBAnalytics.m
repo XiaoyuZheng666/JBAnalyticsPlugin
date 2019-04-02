@@ -15,8 +15,14 @@
 // #define baseApiUrl @"http://testmetis.goldrock.cn:2752"
 //#define baseApiUrl @"http://192.168.30.9:2752"
 
+static NSInteger XYNetTimeout = -1001;        //请求timeout
+static NSInteger XYNetDisconnect = -1009;        //网络断开
+
 #define maxReportNum 90//同一个事件最多纪录90条
+
+
 @implementation JBAnalytics
+
 
 static NSString*_currentDateStr=nil;
 static NSDictionary*_currentAppdata=nil;
@@ -99,7 +105,8 @@ static NSString*baseApiUrl=@"";
         
         if ([dic[@"appData"][@"triggerTime"] isEqualToString:[self currentDateStr]]) {
             continue;
-        }else{
+        }
+        else{
             [reportArray addObject:dic];
         }
     }
@@ -107,6 +114,7 @@ static NSString*baseApiUrl=@"";
     if (reportArray.count==0) {
         return;
     }
+    
     [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/eventBatch" andParams:reportArray andResponseHeader:^(id obj) {
         
         if ([obj statusCode]==200) {
@@ -138,6 +146,7 @@ static NSString*baseApiUrl=@"";
     if (reportTempArray.count==0) {
         return;
     }
+    
     [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/eventBatch" andParams:reportTempArray andResponseHeader:^(id obj) {
         
         if ([obj statusCode]==200) {
@@ -174,7 +183,7 @@ static NSString*baseApiUrl=@"";
         
         [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:dic andResponseHeader:^(id obj) {
             
-            if ([obj statusCode]==200) {
+            if (([obj statusCode]==200)||([obj statusCode]==XYNetTimeout)) {
                 
                     [array removeObject:dic];
             }
@@ -199,7 +208,8 @@ static NSString*baseApiUrl=@"";
     
     [XYNetworking postRequestByServiceUrl:baseApiUrl andApi:@"/metis/put/event" andParams:totalDic andResponseHeader:^(id obj) {
         
-        if ([obj statusCode]!=200) {
+        //网络断开了
+        if ([obj statusCode]==XYNetDisconnect) {
         
             NSMutableArray*eventids =[JBUserDefaults getEventIds];
             
